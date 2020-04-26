@@ -20,7 +20,7 @@ import {
 
 import './App.css'
 
-function App() {
+function Layout() {
 
     const emptyFunc = () => null;
 
@@ -61,11 +61,7 @@ function App() {
                     </Menu>
                 </Grid.Column>
                 <Grid.Column width={12}>
-                    <Switch>
-                        <Route exact path={"/"} component={ProductList} />
-                        <Route path={"/details"} component={ProductDetails} />
-                        <Route path={"/cart"} component={Cart} />
-                    </Switch>
+                    {children}
                 </Grid.Column>
             </Grid>
         <Segment
@@ -79,4 +75,4 @@ function App() {
   );
 }
 
-export default withRouter(App);
+export default withRouter(La);

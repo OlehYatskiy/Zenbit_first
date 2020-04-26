@@ -1,36 +1,55 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import {withRouter} from 'react-router-dom';
+import * as productActions from 'Redux/Product/product.actions';
+
 import {Grid } from 'semantic-ui-react';
 
 import {Card as CardComponent} from './Blocks/Card';
 
-const data = [
+const ProductList = (
     {
-        id: 1,
-        name: 'Phone L1',
-        image: 'https://asset.mediaw.it/wcsstore/MMCatalogAssetStore/asset/images/10/29/102910_5.jpg'
-    },
-    {
-        id: 2,
-        name: 'Phone L2',
-        image: 'https://www.three.co.uk/static/images/device_pages/MobileVersion/Samsung/Galaxy_S10_Plus/Prism_White/carousel/4.jpg'
-    },
-    {
-        id: 3,
-        name: 'Phone L3',
-        image: 'https://www.three.co.uk/static/images/device_pages/MobileVersion/Samsung/Galaxy_S10_Plus/Prism_White/carousel/4.jpg'
-    }
-];
+        products,
+        cart,
+        changeCountInCart,
+        addToCart
+    }) => {
 
-export const ProductList = () => {
+    const onAddToCartClick = (element) => {
+        const arrIndex = cart.findIndex((el) => (el.id === element.id));
+        if (arrIndex === -1)
+            addToCart(element);
+        else
+            changeCountInCart({
+                arrIndex,
+                value: ++cart[arrIndex].count
+            });
+        alert(`Product ${element.name} was added to cart`)
+    }
+
   return (
-      <Grid columns='3'>
+      <Grid columns='3' padded='vertically'>
           {
-              data.map((el) => {
-                  return <Grid.Column>
-                      <CardComponent el={el}/>
+              products.map((el) => {
+                  return <Grid.Column key={el.id}>
+                      <CardComponent
+                          el={el}
+                          onAddToCartClick={onAddToCartClick}/>
                   </Grid.Column>
               })
           }
       </Grid>
   );
 }
+
+function mapStateToProps({ product }) {
+    return {
+        products: product.products,
+        cart: product.cart
+    };
+}
+
+export default withRouter(
+    connect(mapStateToProps, {...productActions})(ProductList)
+);
+
